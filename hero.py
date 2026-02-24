@@ -1,59 +1,62 @@
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
 from matplotlib.patches import FancyBboxPatch
 
-fig, ax = plt.subplots(figsize=(10, 4))
+# 690x290 @ 100dpi — use inches as coordinate units
+DPI = 100
+W, H = 6.9, 2.9
+
+fig, ax = plt.subplots(figsize=(W, H))
 fig.patch.set_facecolor("#0d0d0d")
 ax.set_facecolor("#0d0d0d")
-ax.set_xlim(0, 10)
-ax.set_ylim(4.1, 9.5)
+ax.set_xlim(0, W)
+ax.set_ylim(0, H)
 ax.axis("off")
 
-MONO = "monospace"
-WHITE = "#f0f0f0"
-DIM = "#555555"
-GREEN = "#4ade80"
-ARROW = "#444444"
+MONO   = "monospace"
+WHITE  = "#f0f0f0"
+DIM    = "#555555"
+GREEN  = "#4ade80"
+ARROW  = "#444444"
+
+cx = W / 2  # horizontal center = 3.45
 
 # --- Agent box ---
-agent_box = FancyBboxPatch((3.5, 8.0), 3, 0.95,
-    boxstyle="round,pad=0.15",
-    linewidth=1.2, edgecolor="#444444", facecolor="#1a1a1a")
+bw, bh = 2.2, 0.52
+agent_box = FancyBboxPatch((cx - bw/2, 2.2), bw, bh,
+    boxstyle="round,pad=0.08",
+    linewidth=1.0, edgecolor="#444444", facecolor="#1a1a1a")
 ax.add_patch(agent_box)
-ax.text(5, 8.49, "agent", ha="center", va="center",
-        fontsize=14, color=WHITE, fontfamily=MONO, fontweight="bold")
+ax.text(cx, 2.46, "agent", ha="center", va="center",
+        fontsize=13, color=WHITE, fontfamily=MONO, fontweight="bold")
 
-# --- Arrow down to workspace ---
-ax.annotate("", xy=(5, 7.15), xytext=(5, 8.0),
-    arrowprops=dict(arrowstyle="-|>", color=ARROW, lw=1.5))
+# --- Arrow ---
+ax.annotate("", xy=(cx, 1.78), xytext=(cx, 2.2),
+    arrowprops=dict(arrowstyle="-|>", color=ARROW, lw=1.3))
 
-# --- Root folder ---
-ax.text(5, 6.82, "/workspace/", ha="center", va="center",
-        fontsize=13, color=GREEN, fontfamily=MONO, fontweight="bold")
+# --- /workspace/ ---
+ax.text(cx, 1.60, "/workspace/", ha="center", va="center",
+        fontsize=11, color=GREEN, fontfamily=MONO, fontweight="bold")
 
-# --- Trunk: from workspace down to last entry ---
-trunk_x = 3.5
-ax.plot([trunk_x, trunk_x], [4.55, 6.55], color=DIM, lw=1.2)
-
-# --- Connecting line from /workspace/ down to trunk ---
-ax.plot([trunk_x, 5.0], [6.55, 6.55], color=DIM, lw=1.2)
+# --- Tree ---
+trunk_x = cx - 0.9
+ax.plot([trunk_x, cx],        [1.44, 1.44], color=DIM, lw=1.0)  # connector to workspace
+ax.plot([trunk_x, trunk_x],   [0.22, 1.44], color=DIM, lw=1.0)  # vertical trunk
 
 entries = [
-    ("/emails/unread",     "#a78bfa"),
-    ("/users/123/orders",  "#38bdf8"),
-    ("/context/notes",     "#fb923c"),
+    ("/emails/unread",    "#a78bfa"),
+    ("/users/123/orders", "#38bdf8"),
+    ("/orders/pending",   "#fb923c"),
 ]
-
-y_positions = [6.1, 5.4, 4.7]
+y_positions = [1.18, 0.72, 0.26]
 
 for (label, color), y in zip(entries, y_positions):
-    ax.plot([trunk_x, trunk_x + 0.55], [y, y], color=DIM, lw=1.2)
-    ax.text(trunk_x + 0.7, y, "▸", ha="left", va="center",
-            fontsize=9, color=DIM, fontfamily=MONO)
-    ax.text(trunk_x + 1.1, y, label, ha="left", va="center",
-            fontsize=12, color=color, fontfamily=MONO)
+    ax.plot([trunk_x, trunk_x + 0.28], [y, y], color=DIM, lw=1.0)
+    ax.text(trunk_x + 0.36, y, "▸", ha="left", va="center",
+            fontsize=8, color=DIM, fontfamily=MONO)
+    ax.text(trunk_x + 0.58, y, label, ha="left", va="center",
+            fontsize=11, color=color, fontfamily=MONO)
 
-plt.tight_layout(pad=0)
-plt.savefig("hero.png", dpi=180, bbox_inches="tight",
+fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
+plt.savefig("hero.png", dpi=DPI, bbox_inches=None,
             facecolor=fig.get_facecolor())
 print("Saved hero.png")
