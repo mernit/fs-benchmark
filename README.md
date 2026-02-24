@@ -12,14 +12,15 @@ Benchmarks 1,000 reads of ~100kb of text from:
 
 Tested on Apple M-series, local SSD, 1,000 iterations each.
 
+![Benchmark results](benchmark.png)
+
 | Backend | p50 | p95 | p99 | mean |
 |---|---|---|---|---|
-| Filesystem (single file) | 0.031ms | 0.048ms | 0.162ms | 0.038ms |
-| PostgreSQL | 0.278ms | 0.712ms | 1.325ms | 0.341ms |
-| Redis | 0.356ms | 1.466ms | 3.600ms | 0.536ms |
-| Filesystem (50 concurrent files) | 3.533ms | 8.683ms | 17.899ms | 4.490ms |
+| Filesystem (single file) | 0.029ms | 0.043ms | 0.058ms | 0.031ms |
+| Redis | 0.100ms | 0.174ms | 0.371ms | 0.122ms |
+| PostgreSQL | 0.251ms | 0.629ms | 1.330ms | 0.313ms |
 
-**File reads are ~9x faster than Postgres and ~11x faster than Redis at p50.**
+**File reads are ~3.5x faster than Redis and ~8.7x faster than Postgres at p50.**
 
 For context: a Claude Sonnet call takes 2,000–8,000ms. File I/O is not your bottleneck.
 
