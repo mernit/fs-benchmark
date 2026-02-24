@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from matplotlib.patches import FancyBboxPatch
 
-fig, ax = plt.subplots(figsize=(8, 5.5))
+fig, ax = plt.subplots(figsize=(10, 4))
 fig.patch.set_facecolor("#0d0d0d")
 ax.set_facecolor("#0d0d0d")
 ax.set_xlim(0, 10)
